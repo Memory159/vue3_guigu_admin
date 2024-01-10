@@ -2,9 +2,6 @@
   <h2>App组件</h2>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
