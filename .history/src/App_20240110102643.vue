@@ -1,11 +1,5 @@
-<template>
-    
-</template>
+<template></template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style lang="sass" scoped>
-
-</style>
+<style lang="sass" scoped></style>
