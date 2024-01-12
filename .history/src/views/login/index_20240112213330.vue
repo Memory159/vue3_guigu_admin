@@ -1,0 +1,96 @@
+<template>
+  <div class="login_container">
+      <el-row>
+        <el-col :span="12" :xs="0"></el-col>
+        <el-col :span="12" :xs="24">
+            <el-form class="login_form">
+              <h1>Hello</h1>
+              <h2>欢迎来到硅谷甄选</h2>
+              <el-form-item>
+                <el-input :prefix-icon="User" v-model="loginForm.username"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-input :prefix-icon="Lock" type="password" v-model="loginForm.password" show-password></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button :loading="loading" class="login_btn" type="primary" @click="login">登录</el-button>
+              </el-form-item>
+            </el-form>
+        </el-col>
+      </el-row>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import {User,Lock} from '@element-plus/icons-vue'
+import {reactive,ref} from 'vue'
+import {useRouter} from 'vue-router'
+import {ElNotification} from 'element-plus'
+// 引入用户相关的小仓库
+import useUserStore from '@/store/modules/user'
+let useStore = useUserStore()
+// 获取路由器
+let $router = useRouter()
+// 定义变量控制按钮的加载效果
+let loading = ref(false)
+// 收集表单数据
+let loginForm = reactive({username:'admin',password:'111111'})
+
+// 登录的方法
+const login = async() =>{
+  // 点击登录的时候，让 loading 效果显示出来
+  loading.value = true
+  // 通知仓库发起登录请求
+  // 请求成功->首页展示数据
+  // 请求失败->弹出登录失败信息
+  try {
+    // 保证登录成功
+    await useStore.userLogin(loginForm) // 这里可以通过 .then 来写
+    // 登录成功后利用编程式导航跳转到首页展示数据
+    $router.push('/')  
+    // 登录成功的提示信息
+    ElNotification({
+      type:'success',
+      message:'登录成功'
+    })
+  } catch (error) {
+     // 登录失败的时候关闭 loading 效果
+     loading.value = false
+     // 登录失败的提示信息
+     ElNotification({
+      type:'error',
+      message:(error as Error).message
+    })
+  }
+  
+}
+</script>
+
+<style scoped lang="scss">
+  .login_container{
+    width:100%;
+    height:100vh;
+    background: url('@/assets/images/background.jpg') no-repeat;
+    background-size: cover;
+  }
+  .login_form{
+    position: relative;
+    width: 80%;
+    top: 30vh;
+    background: url('@/assets/images/login_form.png') no-repeat;
+    background-size: cover;
+    padding: 40px;
+    h1{
+      color: white;
+      font-size: 40px;
+    }
+    h2{
+      color: white;
+      font-size: 20px;
+      margin: 20px 0px;
+    }
+    .login_btn{
+      width: 100%;
+    }
+  }
+</style>
